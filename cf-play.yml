@@ -1,0 +1,30 @@
+---
+- hosts: "localhost"
+connection: "local"
+gather_facts: false
+
+vars:
+    KeyName: "inilap"
+    MasterSubnetId: "subnet-95c7e6cd"
+    VPCId: "vpc-af0f10cb"
+    AvailabilityZone: "eu-west-1a"
+
+tasks:
+    - name: Run my lovely CloudFormation stack
+    cloudformation:
+        stack_name: "MyCfnClusterStack"
+        region: "eu-west-1"
+        state: "present"
+        template: "https://s3-eu-west-1.amazonaws.com/cfntemp/ansible_cf.template"
+        template_parameters:
+        KeyName: ""
+        MasterSubnetId: ""
+        VPCId: ""
+        AvailabilityZone: ""
+        tags:
+        tool: "ansible"
+        env: "test"
+    register: my_ec2_stack
+
+    - debug: msg=""
+    - debug: msg=""
