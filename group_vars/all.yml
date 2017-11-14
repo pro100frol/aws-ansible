@@ -1,5 +1,12 @@
 region: eu-west-1
 stack_prefix: ini
 vpc:
-        cidr: 172.31.0.0/16
-
+  cidr: 10.0.0.0/16
+  slash: 24
+segments:
+  Public:
+    azs: 3
+    slash: 26   # size of AZ subnets in each segment
+  Private:
+    azs: 3
+    slash: 26   # size of AZ subnets in each segment
