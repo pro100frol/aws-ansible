@@ -1,0 +1,7 @@
+---
+- name: install mysql server
+  yum: name=mariadb-server state=present
+  tags: mysql
+- name: start the mysql server
+  service: name=mariadb state=started enabled=true
+  tags: mysql
