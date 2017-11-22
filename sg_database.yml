@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    region: eu-west-1
+    allowed_ip: 213.105.30.226/32
+  tasks:
+  - name: create webserver SG
+    ec2_group:
+      region: "{{ region }}"
+      name: sg_webserver_frol
+      description: SG for frol webservers
+      rules:
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+      rules_egress:
+        - proto: all
+          cidr_ip: 0.0.0.0/0
+  - name: create database SG
+    ec2_group:
+      region: "{{ region }}"
+      name: sg_database_frol
+      description: SG for frol database host
+      rules:
+        #allow SSH from working place
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: "{{ allowed_ip }}"
+        #allow mysql access from webserver group
+        - proto: tcp
+          from_port: 3306
+          to_port: 3306
+          group_name: sg_webserver_frol
+      rules_egress:
+        - proto: all
+          cidr_ip: 0.0.0.0/0
